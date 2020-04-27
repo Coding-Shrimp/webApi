@@ -2,47 +2,85 @@ const mysql = require('mysql')
 const express = require('express')
 const app = express()
 const router = express.Router();
-
 // 解析参数
 const bodyParser = require('body-parser')
+
+// 配置文件
+const setting = require('./public/setting')
+
+const expressJwt = require('express-jwt')
+// 导入token校验文件
+const verify = require('./public/verify')
+
+
+
+
 // json请求
 app.use(bodyParser.json())
 // 表单请求
 app.use(bodyParser.urlencoded({extended: false}))
 
-const option = {
-    host: 'localhost',
-    user: 'root',
-    password: 'root',
-    port: '3306',
-    database: 'nodecms',
-    connectTimeout: 5000, //连接超时
-    multipleStatements: false //是否允许一个query中包含多条sql语句
-}
+
+// 解析token获取用户信息
+app.use((req, res, next) => {
+	// 获取请求头中的参数
+    let token = req.headers[setting.token.header]
+    
+    if(token === undefined){
+        return next()
+    }else{
+    	// token校验并将校验结果保存至请求头中
+        verify.getToken(token).then(data => {
+            req.data = data
+            return next()
+        }).catch(_ =>{
+            return next()
+        })
+    }
+})
+
+//验证token是否过期并规定哪些路由不用验证
+app.use(expressJwt({
+    secret: setting.token.signKey,
+}).unless({
+    //除了这个地址，其他的URL都需要验证
+    path: setting.token.unRoute 
+}))
+//当token失效返回提示信息
+app.use((err, req, res, next) => {
+    if (err.status === 401) {
+        return res.status(err.status).json({
+            status: err.status,
+            msg: '登录失效',
+            error: '登录失效'
+        })
+    }
+})
+
 let pool;
 repool()
 
-// 返回
-var initRT = function ({ code = 1, msg = '', data = {} }) {
-    this.c = code;
-    this.m = msg;
-    this.d = data;
-};
-var Result = (function () {
-    var ins;
-    return function ({ code, msg, data }) {
-        if (!ins) {
-            ins = new initRT({ code, msg, data });
-        }
-        return ins;
-    }
-})();
+// // 返回
+// var Result = function ({ code = 1, msg = '请求成功', data = {} }) {
+//     this.c = code;
+//     this.m = msg;
+//     this.d = data;
+// };
+// var Result = (function () {
+//     var ins;
+//     return function ({ code, msg, data }) {
+//         if (!ins) {
+//             ins = new initRT({ code, msg, data });
+//         }
+//         return ins;
+//     }
+// })();
 
 // 断线重连机制
 function repool() {
     // 创建连接池
     pool = mysql.createPool({
-        ...option,
+        ...setting.sql,
         waitForConnections: true, //当无连接池可用时，等待（true）还是抛错（false）
         connectionLimit: 100, //连接数限制
         queueLimit: 0 //最大连接等待数（0为不限制）
@@ -57,4 +95,24 @@ function repool() {
     })
 }
 
-module.exports = { app, pool, Result, router }
+var query=function(sql,options){ 
+    var promise = new Promise(function(resolve, reject){
+        pool.getConnection(function(err,conn){ 
+            if(err){ 
+                console.log("连接失败");
+            }else{ 
+                conn.query(sql,options,function(err,re){ 
+                    if (err) {
+                        return reject(err);
+                    }
+                    //释放连接      
+                    conn.release(); 
+                    return resolve(re);
+                }); 
+            } 
+        }); 
+    })
+    return promise;
+};    
+
+module.exports = { app, query, router }
