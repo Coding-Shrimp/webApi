@@ -1,16 +1,22 @@
-const { app} =require('./connect')
-const home = require('./router/home')
+const { app } = require('./connect')
+const home = require('./router/api')
 const admin = require('./router/admin')
 
 app.all('*', (req, res, next) => {
     //这里处理全局拦截，一定要写在最上面
+
+    res.header("Access-Control-Allow-Credentials", true);
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Headers", "X-Requested-With");
+    res.header("Access-Control-Allow-Methods", "PUT,POST,GET,DELETE,OPTIONS");
+    res.header("Content-Type", "application/json;charset=utf-8");
     next()
 })
 app.all('/', (req, res) => {
     res.send("请求接口,看啥看")
 })
-app.use('/home', home)
+app.use('/api', home)
 app.use('/admin', admin)
-app.listen(8088, () => {
+app.listen(3007, () => {
     console.log('服务启动:8088')
 })

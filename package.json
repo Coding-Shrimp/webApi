@@ -13,6 +13,11 @@
     "body-parser": "^1.19.0",
     "cors": "^2.8.5",
     "express": "^4.17.1",
-    "mysql": "^2.18.1"
+    "express-jwt": "^5.3.3",
+    "hotnode": "0.0.8",
+    "mysql": "^2.18.1",
+    "nodejs-md5": "^1.1.0",
+    "nodemailer": "^6.4.6",
+    "qiniu": "^7.3.1"
   }
 }
