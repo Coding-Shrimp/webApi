@@ -20,17 +20,16 @@ module.exports = {
             { url: '/api/commontlist', methods: ['GET'] },
             // { url: '/api/article/id', methods: ['GET'] },
             { url: /^\/api\/article\/.*/, methods: ['GET'] },
-
             { url: '/other/setmap', methods: ['GET'] },
         ]
     },
 
     sql: {
-        host: '129.28.194.16',
-        user: 'qaq6',
-        password: 'id6kNhXPacjS2tTz',
+        host: '127.0.0.1',
+        user: 'root',
+        password: 'root',
         port: '3306',
-        database: 'qaq6',
+        database: 'root',
         connectTimeout: 5000, //连接超时
         multipleStatements: false //是否允许一个query中包含多条sql语句
     }
