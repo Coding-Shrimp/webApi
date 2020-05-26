@@ -141,7 +141,15 @@ router.get('/commontlist', function(req, res) {
 router.get('/article/:id', function(req, res) {
         query(uSql.updateCard, [req.params.id]).then(r => {}).catch(er => {});
         query(uSql.queryArticle, [req.params.id]).then(r => {
-            resultS(res, { content: r[0] });
+            if(r.length>0){
+                resultS(res, { content: r[0] });
+            }else {
+                return res.status(500).json({
+                    status: 500,
+                    msg: '文章不存在',
+                    error: '文章不存在'
+                })
+            }
         }).catch(er => {
             resultE(res, { msg: '详情加载失败' });
         });

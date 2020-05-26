@@ -1,6 +1,7 @@
 const { app } = require('./connect')
 const home = require('./router/api')
 const admin = require('./router/admin')
+const other = require('./router/other')
 
 app.all('*', (req, res, next) => {
     //这里处理全局拦截，一定要写在最上面
@@ -17,6 +18,7 @@ app.all('/', (req, res) => {
 })
 app.use('/api', home)
 app.use('/admin', admin)
+app.use('/other', other)
 app.listen(3007, () => {
     console.log('服务启动:8088')
 })

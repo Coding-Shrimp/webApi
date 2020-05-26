@@ -18,17 +18,19 @@ module.exports = {
             { url: '/api/recordList', methods: ['GET'] },
             { url: '/api/links', methods: ['GET'] },
             { url: '/api/commontlist', methods: ['GET'] },
-            { url: '/api/article/id', methods: ['GET'] },
+            // { url: '/api/article/id', methods: ['GET'] },
             { url: /^\/api\/article\/.*/, methods: ['GET'] },
+
+            { url: '/other/setmap', methods: ['GET'] },
         ]
     },
 
     sql: {
-        host: '127.0.0.1',
-        user: 'root',
-        password: 'root',
+        host: '129.28.194.16',
+        user: 'qaq6',
+        password: 'id6kNhXPacjS2tTz',
         port: '3306',
-        database: 'root',
+        database: 'qaq6',
         connectTimeout: 5000, //连接超时
         multipleStatements: false //是否允许一个query中包含多条sql语句
     }
