@@ -20,17 +20,39 @@ module.exports = {
             { url: '/api/commontlist', methods: ['GET'] },
             // { url: '/api/article/id', methods: ['GET'] },
             { url: /^\/api\/article\/.*/, methods: ['GET'] },
-            { url: '/other/setmap', methods: ['GET'] },
+            // { url: '/other/setmap', methods: ['GET'] },
         ]
     },
-
+    baidu: {
+        //*  *  *  *  *  *  // 6个占位符从左到右分别代表：秒、分、时、日、月、周几
+        // ┬ ┬ ┬ ┬ ┬ ┬
+        // │ │ │ │ │ |
+        // │ │ │ │ │ └ day of week (0 - 7) (0 or 7 is Sun)
+        // │ │ │ │ └───── month (1 - 12)
+        // │ │ │ └────────── day of month (1 - 31)
+        // │ │ └─────────────── hour (0 - 23)
+        // │ └──────────────────── minute (0 - 59)
+        // └───────────────────────── second (0 - 59, OPTIONAL)
+        //每分钟的第30秒定时执行一次:
+        bdPostTime: '0 0 9 * * *',
+        bdPost: {
+            hostname: 'data.zz.baidu.com',
+            path: '/urls?site=www.itliuyang.com&token=L6HyRtdmQNtpR6wt',
+            method: 'POST',
+            headers: {
+                'Content-Type': 'text/plain'
+            }
+        }
+      
+     },
     sql: {
-        host: '127.0.0.1',
-        user: 'root',
-        password: 'root',
+        host: '129.28.194.16',
+        user: 'qaq6',
+        password: 'id6kNhXPacjS2tTz',
         port: '3306',
-        database: 'root',
+        database: 'qaq6',
         connectTimeout: 5000, //连接超时
         multipleStatements: false //是否允许一个query中包含多条sql语句
-    }
+    },
+    
 }
