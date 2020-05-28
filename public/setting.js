@@ -11,7 +11,6 @@ module.exports = {
             { url: '/api/admin/login', methods: ['POST'] },
             { url: '/api/list', methods: ['GET'] },
             { url: '/api/addcommont', methods: ['POST'] },
-
             { url: '/api/mydetail', methods: ['GET'] },
             { url: '/api/popular', methods: ['GET'] },
             { url: '/api/cardType', methods: ['GET'] },
@@ -34,7 +33,7 @@ module.exports = {
         // │ └──────────────────── minute (0 - 59)
         // └───────────────────────── second (0 - 59, OPTIONAL)
         //每分钟的第30秒定时执行一次:
-        bdPostTime: '0 0 9 * * *',
+        bdPostTime: '30 1 1 * * *', 
         bdPost: {
             hostname: 'data.zz.baidu.com',
             path: '/urls?site=www.itliuyang.com&token=L6HyRtdmQNtpR6wt',

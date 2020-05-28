@@ -12,37 +12,45 @@ const expressJwt = require('express-jwt')
 const verify = require('./public/verify')
 
 // 文件操作 文件日志
-let fs = require('fs');
-let stderr = fs.createWriteStream('./a.log',{
-  flags:'w'//文件的打开模式
-  ,mode:0o666//文件的权限设置
-  ,encoding:'utf8'//写入文件的字符的编码
-  ,highWaterMark:3//最高水位线
-  ,start:0 //写入文件的起始索引位置        
-  ,autoClose:true//是否自动关闭文档
-})
-let logger = new console.Console(stderr);
+// let fs = require('fs');
+// let stderr = fs.createWriteStream('./logs/log.log', {
+//     flags: 'w'//文件的打开模式
+//     , mode: 0o666//文件的权限设置
+//     , encoding: 'utf8'//写入文件的字符的编码
+//     , highWaterMark: 3//最高水位线
+//     , start: 0 //写入文件的起始索引位置        
+//     , autoClose: true//是否自动关闭文档
+// })
+// let stdok = fs.createWriteStream('./logs/loger.log', {
+//     flags: 'w'//文件的打开模式
+//     , mode: 0o666//文件的权限设置
+//     , encoding: 'utf8'//写入文件的字符的编码
+//     , highWaterMark: 3//最高水位线
+//     , start: 0 //写入文件的起始索引位置        
+//     , autoClose: true//是否自动关闭文档
+// })
+// let logger = new console.Console(stdok, stderr);
 
 
 // json请求
 app.use(bodyParser.json())
 // 表单请求
-app.use(bodyParser.urlencoded({extended: false}))
+app.use(bodyParser.urlencoded({ extended: false }))
 
 // 解析token获取用户信息
 app.use((req, res, next) => {
-  
-	// 获取请求头中的参数
+
+    // 获取请求头中的参数
     let token = req.headers[setting.token.header]
-    
-    if(token === undefined){
+
+    if (token === undefined) {
         return next()
-    }else{
-    	// token校验并将校验结果保存至请求头中
+    } else {
+        // token校验并将校验结果保存至请求头中
         verify.getToken(token).then(data => {
             req.data = data
             return next()
-        }).catch(_ =>{
+        }).catch(_ => {
             return next()
         })
     }
@@ -53,7 +61,7 @@ app.use(expressJwt({
     secret: setting.token.signKey,
 }).unless({
     //除了这个地址，其他的URL都需要验证
-    path: setting.token.unRoute 
+    path: setting.token.unRoute
 }))
 //当token失效返回提示信息
 app.use((err, req, res, next) => {
@@ -69,22 +77,6 @@ app.use((err, req, res, next) => {
 let pool;
 repool()
 
-// // 返回
-// var Result = function ({ code = 1, msg = '请求成功', data = {} }) {
-//     this.c = code;
-//     this.m = msg;
-//     this.d = data;
-// };
-// var Result = (function () {
-//     var ins;
-//     return function ({ code, msg, data }) {
-//         if (!ins) {
-//             ins = new initRT({ code, msg, data });
-//         }
-//         return ins;
-//     }
-// })();
-
 // 断线重连机制
 function repool() {
     // 创建连接池
@@ -97,34 +89,32 @@ function repool() {
     pool.on('error', err => {
         err.code === 'PROTOCOL_CONNECTION_LOST' && setTimeout(repool, 2000)
     })
-    app.all('*', (_,__, next) => {
-        pool.getConnection( err => {
+    app.all('*', (_, __, next) => {
+        pool.getConnection(err => {
             err && setTimeout(repool, 2000) || next()
         })
     })
 }
 
-var query=function(sql,options){ 
-    var promise = new Promise(function(resolve, reject){
-        pool.getConnection(function(err,conn){ 
-            if(err){ 
-                console.log("连接失败");
-            }else{ 
-                conn.query(sql,options,function(err,re){ 
+var query = function (sql, options) {
+    var promise = new Promise(function (resolve, reject) {
+        pool.getConnection(function (err, conn) {
+            if (err) {
+                console.error("连接失败");
+            } else {
+                conn.query(sql, options, function (err, re) {
                     if (err) {
-                        logger.log(new Date()+"--请求失败: "+err);
+                        console.error("--请求失败: " + err);
                         return reject(err);
                     }
-                    // console.log(re);
-                    // logger.log("请求成功: "+re);
                     //释放连接      
-                    conn.release(); 
+                    conn.release();
                     return resolve(re);
-                }); 
-            } 
-        }); 
+                });
+            }
+        });
     })
     return promise;
-};    
+};
 
-module.exports = { app,logger, query, router }
+module.exports = { app, query, router }

@@ -2,16 +2,18 @@ const { app } = require('./connect')
 const home = require('./router/api')
 const admin = require('./router/admin')
 const other = require('./router/other')
+// 百度定时推送
+const schedule = require('./router/schedule')
 
 app.all('*', (req, res, next) => {
     //这里处理全局拦截，一定要写在最上面
-    res.header("Access-Control-Allow-Credentials", true);
-    res.header("Access-Control-Allow-Origin", "*");
-    res.header("Access-Control-Allow-Headers", "X-Requested-With");
-    res.header("Access-Control-Allow-Methods", "PUT,POST,GET,DELETE,OPTIONS");
-    res.header("Content-Type", "application/json;charset=utf-8");
+    // res.header("Access-Control-Allow-Credentials", true);
+    // res.header("Access-Control-Allow-Origin", "*");
+    // res.header("Access-Control-Allow-Headers", "X-Requested-With");
+    // res.header("Access-Control-Allow-Methods", "PUT,POST,GET,DELETE,OPTIONS");
+    // res.header("Content-Type", "application/json;charset=utf-8");
     next()
-})
+}) 
    
 app.all('/', (req, res) => {
     res.send("请求接口,看啥看")
