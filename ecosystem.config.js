@@ -1,7 +1,7 @@
 module.exports = {
   apps : [{
     name: "api",
-    script: './index.js',
+    script: './app.js',
     watch: [
       'router',
       'public'

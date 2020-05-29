@@ -56,6 +56,7 @@ app.use((req, res, next) => {
     }
 })
 
+
 //验证token是否过期并规定哪些路由不用验证
 app.use(expressJwt({
     secret: setting.token.signKey,
