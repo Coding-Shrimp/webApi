@@ -33,7 +33,7 @@ module.exports = {
         // │ └──────────────────── minute (0 - 59)
         // └───────────────────────── second (0 - 59, OPTIONAL)
         //每分钟的第30秒定时执行一次:
-        bdPostTime: '30 * * * * *', 
+        bdPostTime: '00 00 01 * * *', 
         bdPost: {
             hostname: 'data.zz.baidu.com',
             path: '/urls?site=www.itliuyang.com&token=L6HyRtdmQNtpR6wt',

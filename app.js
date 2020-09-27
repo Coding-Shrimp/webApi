@@ -3,7 +3,7 @@ const home = require('./routes/api')
 const admin = require('./routes/admin')
 const other = require('./routes/other')
 // 百度定时推送
-const schedule = require('./routes/schedule')
+require('./routes/schedule')
 
 // app.all('*', (req, res, next) => {
 //     //这里处理全局拦截，一定要写在最上面

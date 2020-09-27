@@ -68,6 +68,7 @@ router.post('/admin/add', function(req, res) {
             }
             query(uSql.insertCard, [timestamp, ctitle, cHtmlContent, typeid, new Date(), 0, cimg, cPreface, cMdContent]).then(r => {
                 resultS(res, { data: r, msg: "发布成功" });
+                
             }).catch(err => {
                 resultE(res, { msg: '加载错误' });
             })

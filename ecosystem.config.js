@@ -1,6 +1,6 @@
 module.exports = {
   apps : [{
-    name: "api",
+    name: "blog_api",
     script: './app.js',
     watch: [
       'router',

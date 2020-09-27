@@ -39,6 +39,7 @@ function sendMail(from, aliasName, tos, subject, msg) {
 // 获取热门
 router.get('/popular', function(req, res) {
         query(uSql.queryHot).then(r => {
+            console.log(r);
             resultS(res, { list: r });
         }).catch(err => {
             resultE(res, { msg: '热门加载失败' });
